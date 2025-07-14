@@ -1,8 +1,6 @@
 local backend = require "backend"
 
-
 local M = {}
-
 
 local state = {
 	floaterm = {
@@ -12,27 +10,48 @@ local state = {
 	}
 }
 
-
 local langs = {
 	{
-		ext = "c",
+		exts = { "c" },
 		command = "gcc %s -o %s && ./%s",
 		argv = { "%.", "%", "%" }
 	},
 	{
-		ext = "py",
+		exts = { "py" },
 		command = "python3 %s",
 		argv = { "%." }
 	},
 }
 
+local maps = {
+	floaterm_on = "<leader>tt",
+	floaterm_off = "<esc><esc>",
+	floatrun = "<leader>fr",
+}
 
-M.setup = function()
-	vim.keymap.set("n", "<leader>tt", M.toggle_floaterm)
-	vim.keymap.set("t", "<esc><esc>", M.toggle_floaterm, {
-		buffer = state.floaterm.buf
+M.setup = function(opts)
+	opts = opts or {}
+
+	if opts then
+		if opts.langs then langs = opts.langs end
+		if opts.maps then maps = opts.maps end
+	end
+
+	vim.keymap.set("n", maps.floaterm_on, M.toggle_floaterm,
+		{ noremap = true, silent = true })
+
+	vim.keymap.set("n", maps.floatrun, M.floatrun,
+		{ noremap = true, silent = true })
+
+	-- Do not set the keymap for term buffer unless it is floaterm
+	vim.api.nvim_create_autocmd("TermOpen", {
+		callback = function(event)
+			if event.buf == state.floaterm.buf then
+				vim.keymap.set("t", maps.floaterm_off, M.toggle_floaterm,
+					{ buffer = event.buf, noremap = true, silent = true })
+			end
+		end,
 	})
-	vim.keymap.set("n", "<leader>fr", M.floatrun)
 end
 
 

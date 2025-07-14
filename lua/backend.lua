@@ -1,12 +1,16 @@
 local M = {}
 
-
 M.get_cmdstring = function(langs)
 	local ext = vim.fn.expand("%:e")
 	local lang = nil
 
 	for _, l in ipairs(langs) do
-		if l.ext == ext then lang = l end
+		for _, e in ipairs(l.exts) do
+			if e == ext then
+				lang = l
+				break
+			end
+		end
 	end
 
 	if not lang then
@@ -24,7 +28,7 @@ M.get_cmdstring = function(langs)
 	local cmdstring = ""
 
 	if lang.command then
-		local unpack = unpack or table.unpack
+		local unpack = table.unpack or unpack
 		cmdstring = string.format(lang.command, unpack(argv))
 	else
 		local warnstring = string.format("No command for ext: %s", ext)
@@ -109,6 +113,5 @@ M.run_in_floaterm = function(cmdstring, floatstate)
 		end
 	end, 100)
 end
-
 
 return M

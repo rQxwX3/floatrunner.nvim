@@ -1,25 +1,33 @@
 local state = {
-	floating = {
+	floaterm = {
 		buf = -1,
-		win = -1
+		win = -1,
+		chan = -1,
 	}
 }
 
-local function create_floating_window(opts)
+
+local function is_valid_floaterm()
+	-- floaterm is valid = buf is valid, win is valid, buf is term
+	return vim.api.nvim_buf_is_valid(state.floaterm.buf) and
+			vim.api.nvim_win_is_valid(state.floaterm.win) and
+			vim.bo[state.floaterm.buf].buftype == "terminal"
+end
+
+
+local function create_floatwin(opts)
 	opts = opts or {}
 
-	local height = opts.height or math.floor(vim.o.lines * 0.8)
-	local width = opts.width or math.floor(vim.o.columns * 0.8)
+	local height = math.floor(vim.o.lines * 0.8)
+	local width = math.floor(vim.o.columns * 0.8)
 
 	local col = math.floor((vim.o.columns - width) / 2)
 	local row = math.floor((vim.o.lines - height) / 2)
 
-	local buf = nil
-
 	if vim.api.nvim_buf_is_valid(opts.buf) then
-		buf = opts.buf
+		state.floaterm.buf = opts.buf
 	else
-		buf = vim.api.nvim_create_buf(false, true)
+		state.floaterm.buf = vim.api.nvim_create_buf(false, true)
 	end
 
 	local win_config = {
@@ -32,74 +40,67 @@ local function create_floating_window(opts)
 		border = "rounded"
 	}
 
-	local win = vim.api.nvim_open_win(buf, true, win_config)
-
-	return { buf = buf, win = win }
+	state.floaterm.win = vim.api.nvim_open_win(
+		state.floaterm.buf, true, win_config
+	)
 end
 
-local function run_command_in_terminal(commandstring)
-	if not commandstring or commandstring == "" then
-		vim.notify("Expected a non-empty command string", vim.log.levels.WARN)
-		return
-	end
 
-	local commands = vim.split(commandstring, "&&", { trimempty = true })
-	for i, cmd in ipairs(commands) do
-		local trimmed = vim.trim(cmd)
-		if trimmed ~= "" then
-			commands[i] = trimmed
-		end
-	end
+local function create_floaterm()
+	create_floatwin { buf = state.floaterm.buf }
 
-	if #commands == 0 then
-		vim.notify("No valid commands to run", vim.log.levels.WARN)
-		return
-	end
-
-	if not vim.api.nvim_win_is_valid(state.floating.win) then
-		state.floating = create_floating_window { buf = state.floating.buf }
+	if vim.bo[state.floaterm.buf].buftype ~= "terminal" then
 		vim.cmd.term()
 	end
 
 	vim.cmd("startinsert")
-
-	local job_id = vim.b.terminal_job_id
-
-	if not job_id then
-		vim.notify("Failed to get terminal_job_id", vim.log.levels.ERROR)
-	end
-
-	for _, cmd in ipairs(commands) do
-		vim.fn.chansend(job_id, cmd .. "\n")
-	end
 end
 
-local toggle_terminal = function()
-	if not vim.api.nvim_win_is_valid(state.floating.win) then
-		state.floating = create_floating_window { buf = state.floating.buf }
-		if vim.bo[state.floating.buf].buftype ~= "terminal" then
-			vim.cmd.term()
-		end
-		vim.cmd("startinsert")
+
+local function toggle_floaterm()
+	if not is_valid_floaterm() then
+		create_floaterm()
 	else
-		vim.api.nvim_win_hide(state.floating.win)
+		vim.api.nvim_win_hide(state.floaterm.win)
 	end
 end
 
-local compile_run_c = function()
+
+local function run_in_floaterm(cmdstring)
+	if not is_valid_floaterm() then
+		create_floaterm()
+	end
+
+	vim.defer_fn(function()
+		if state.floaterm.chan == -1 then
+			state.floaterm.chan = vim.b.terminal_job_id
+			vim.fn.chansend(state.floaterm.chan, "clear\n")
+		end
+
+		local commands = vim.split(cmdstring, "&&", { trimempty = true })
+
+		for i, cmd in ipairs(commands) do
+			local trimmed = vim.trim(cmd)
+			if trimmed ~= "" then commands[i] = trimmed end
+		end
+
+		for _, cmd in ipairs(commands) do
+			vim.fn.chansend(state.floaterm.chan, cmd .. "\n")
+		end
+	end, 100)
+end
+
+
+local function compile_run_c()
 	local cfile = vim.fn.expand("%:t")
 	local objfile = vim.fn.expand("%:r")
 
 	local cmdstring = string.format("gcc %s -o %s && ./%s", cfile, objfile, objfile)
-	run_command_in_terminal(cmdstring)
+
+	run_in_floaterm(cmdstring)
 end
 
-vim.api.nvim_create_user_command("Floaterminal", toggle_terminal, {})
-vim.api.nvim_create_user_command("FloaterminalRun", function(opts)
-	run_command_in_terminal(opts.args)
-end, {
-	nargs = "+",
-})
-vim.keymap.set("n", "<leader>tt", toggle_terminal)
-vim.keymap.set("t", "<esc><esc>", toggle_terminal)
+
+vim.keymap.set("n", "<leader>tt", toggle_floaterm)
+vim.keymap.set("t", "<esc><esc>", toggle_floaterm)
 vim.keymap.set("n", "<leader>cc", compile_run_c)

@@ -1,6 +1,41 @@
 local M = {}
 
 
+M.get_cmdstring = function(langs)
+	local ext = vim.fn.expand("%:e")
+	local lang = nil
+
+	for _, l in ipairs(langs) do
+		if l.ext == ext then lang = l end
+	end
+
+	if not lang then
+		local warnstring = string.format("No entry for ext: %s", ext)
+		vim.notify(warnstring, vim.log.levels.WARN)
+		return
+	end
+
+	local argv = vim.deepcopy(lang.argv)
+	for i, arg in ipairs(argv) do
+		if arg == "%" then argv[i] = vim.fn.expand("%:r") end
+		if arg == "%." then argv[i] = vim.fn.expand("%") end
+	end
+
+	local cmdstring = ""
+
+	if lang.command then
+		local unpack = unpack or table.unpack
+		cmdstring = string.format(lang.command, unpack(argv))
+	else
+		local warnstring = string.format("No command for ext: %s", ext)
+		vim.notify(warnstring, vim.log.levels.WARN)
+		return
+	end
+
+	return cmdstring
+end
+
+
 M.create_floatwin = function(floatstate)
 	local height = math.floor(vim.o.lines * 0.8)
 	local width = math.floor(vim.o.columns * 0.8)

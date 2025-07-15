@@ -1,45 +1,5 @@
 local M = {}
 
-M.get_cmdstring = function(langs)
-	local ext = vim.fn.expand("%:e")
-	local lang = nil
-
-	for _, l in ipairs(langs) do
-		for _, e in ipairs(l.exts) do
-			if e == ext then
-				lang = l
-				break
-			end
-		end
-	end
-
-	if not lang then
-		local warnstring = string.format("No entry for ext: %s", ext)
-		vim.notify(warnstring, vim.log.levels.WARN)
-		return
-	end
-
-	local argv = vim.deepcopy(lang.argv)
-	for i, arg in ipairs(argv) do
-		if arg == "%" then argv[i] = vim.fn.expand("%:r") end
-		if arg == "%." then argv[i] = vim.fn.expand("%") end
-	end
-
-	local cmdstring = ""
-
-	if lang.command then
-		local unpack = table.unpack or unpack
-		cmdstring = string.format(lang.command, unpack(argv))
-	else
-		local warnstring = string.format("No command for ext: %s", ext)
-		vim.notify(warnstring, vim.log.levels.WARN)
-		return
-	end
-
-	return cmdstring
-end
-
-
 M.create_floatwin = function(floatstate)
 	local height = math.floor(vim.o.lines * 0.8)
 	local width = math.floor(vim.o.columns * 0.8)
@@ -90,7 +50,7 @@ M.is_valid_floaterm = function(floatstate)
 end
 
 
-M.run_in_floaterm = function(cmdstring, floatstate)
+M.run_in_floaterm = function(command, floatstate)
 	if not M.is_valid_floaterm(floatstate) then
 		M.create_floaterm(floatstate)
 	end
@@ -101,7 +61,7 @@ M.run_in_floaterm = function(cmdstring, floatstate)
 			vim.fn.chansend(floatstate.chan, "clear\n")
 		end
 
-		local commands = vim.split(cmdstring, "&&", { trimempty = true })
+		local commands = vim.split(command, "&&", { trimempty = true })
 
 		for i, cmd in ipairs(commands) do
 			local trimmed = vim.trim(cmd)

@@ -1,4 +1,6 @@
-local backend = require "backend"
+local floaterm = require "floaterm"
+local fileutils = require "internal.fileutils"
+local buildutils = require "internal.buildutils"
 local defaults = require "defaults"
 
 local M = {}
@@ -42,8 +44,8 @@ end
 
 
 M.toggle_floaterm = function()
-	if not backend.is_valid_floaterm(state.floaterm) then
-		state.floaterm = backend.create_floaterm(state.floaterm)
+	if not floaterm.is_valid_floaterm(state.floaterm) then
+		state.floaterm = floaterm.create_floaterm(state.floaterm)
 	else
 		vim.api.nvim_win_hide(state.floaterm.win)
 	end
@@ -51,12 +53,28 @@ end
 
 
 M.floatrun = function()
-	local cmdstring = backend.get_cmdstring(langs)
+	local command = fileutils.getruncmd(langs)
 
-	if cmdstring then
-		backend.run_in_floaterm(cmdstring, state.floaterm)
+	if command then
+		floaterm.run_in_floaterm(command, state.floaterm)
 	else
-		vim.notify("Unable to create cmdstring", vim.log.levels.WARN)
+		vim.notify("Unable to get run command", vim.log.levels.WARN)
+	end
+end
+
+
+M.floatbuild = function()
+	local build = buildutils.getbuildcmd(builds)
+
+	if build.path and build.command then
+		--floaterm.run_in_floaterm(build.command, build.path, state.floaterm)
+		return
+	end
+
+	if not build.path then
+		vim.notify("Unable to get build path", vim.log.levels.WARN)
+	else
+		vim.notify("Unable to get build command", vim.log.levels.WARN)
 	end
 end
 

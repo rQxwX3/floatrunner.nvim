@@ -15,7 +15,7 @@ M.langs = {
 
 M.builds = {
 	{
-		filename = { "Makefile" },
+		filename = "Makefile",
 		command = "make"
 	}
 }

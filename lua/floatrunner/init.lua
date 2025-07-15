@@ -50,7 +50,7 @@ M.toggle_floaterm = function()
 	if not floaterm.is_valid_floaterm(state.floaterm) then
 		floaterm.show_floaterm(state.floaterm)
 	else
-		vim.api.nvim_win_close(state.floaterm.win, false)
+		vim.api.nvim_win_hide(state.floaterm.win)
 	end
 end
 
@@ -72,7 +72,7 @@ M.floatbuild = function()
 	if not build then return end
 
 	if build.path and build.command then
-		--floaterm.run_in_floaterm(build.command, build.path, state.floaterm)
+		floaterm.run_in_floaterm(state.floaterm, build.command, build.path)
 		return
 	end
 

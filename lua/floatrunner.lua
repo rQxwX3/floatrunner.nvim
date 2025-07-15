@@ -1,4 +1,5 @@
 local backend = require "backend"
+local defaults = require "defaults"
 
 local M = {}
 
@@ -10,24 +11,9 @@ local state = {
 	}
 }
 
-local langs = {
-	{
-		exts = { "c" },
-		command = "gcc %s -o %s && ./%s",
-		argv = { "%.", "%", "%" }
-	},
-	{
-		exts = { "py" },
-		command = "python3 %s",
-		argv = { "%." }
-	},
-}
-
-local maps = {
-	floaterm_on = "<leader>tt",
-	floaterm_off = "<esc><esc>",
-	floatrun = "<leader>fr",
-}
+local langs = defaults.langs
+local maps = defaults.maps
+local builds = defaults.builds
 
 M.setup = function(opts)
 	opts = opts or {}

@@ -1,7 +1,7 @@
-local floaterm = require "floaterm"
-local fileutils = require "internal.fileutils"
-local buildutils = require "internal.buildutils"
-local defaults = require "defaults"
+local floaterm = require "floatrunner.floaterm"
+local fileutils = require "floatrunner.internal.fileutils"
+local buildutils = require "floatrunner.internal.buildutils"
+local defaults = require "floatrunner.defaults"
 
 local M = {}
 

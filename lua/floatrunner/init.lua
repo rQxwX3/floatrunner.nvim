@@ -31,6 +31,9 @@ M.setup = function(opts)
 	vim.keymap.set("n", maps.floatrun, M.floatrun,
 		{ noremap = true, silent = true })
 
+	vim.keymap.set("n", maps.floatbuild, M.floatbuild,
+		{ noremap = true, silent = true })
+
 	-- Do not set the keymap for term buffer unless it is floaterm
 	vim.api.nvim_create_autocmd("TermOpen", {
 		callback = function(event)
@@ -45,9 +48,9 @@ end
 
 M.toggle_floaterm = function()
 	if not floaterm.is_valid_floaterm(state.floaterm) then
-		state.floaterm = floaterm.create_floaterm(state.floaterm)
+		floaterm.show_floaterm(state.floaterm)
 	else
-		vim.api.nvim_win_hide(state.floaterm.win)
+		vim.api.nvim_win_close(state.floaterm.win, false)
 	end
 end
 
@@ -56,7 +59,7 @@ M.floatrun = function()
 	local command = fileutils.getruncmd(langs)
 
 	if command then
-		floaterm.run_in_floaterm(command, state.floaterm)
+		floaterm.run_in_floaterm(state.floaterm, command)
 	else
 		vim.notify("Unable to get run command", vim.log.levels.WARN)
 	end
@@ -65,6 +68,8 @@ end
 
 M.floatbuild = function()
 	local build = buildutils.getbuildcmd(builds)
+
+	if not build then return end
 
 	if build.path and build.command then
 		--floaterm.run_in_floaterm(build.command, build.path, state.floaterm)

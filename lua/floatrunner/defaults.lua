@@ -24,6 +24,7 @@ M.maps = {
 	floaterm_on = "<leader>tt",
 	floaterm_off = "<esc><esc>",
 	floatrun = "<leader>fr",
+	floatbuild = "<leader>fb"
 }
 
 return M

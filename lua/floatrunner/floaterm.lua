@@ -11,24 +11,19 @@ M.run_in_floaterm = function(floatstate, command, cwd)
 	cwd = cwd or vim.loop.cwd()
 
 	if not vim.api.nvim_buf_is_valid(floatstate.buf) or vim.loop.cwd() ~= cwd then
-		M.create_termbuf(floatstate)
-		vim.fn.chansend(floatstate.chan, "clear\n")
+		M.create_termbuf(floatstate, cwd)
 	end
 
-	local commands = vim.split(command, "&&", { trimempty = true })
-
-	for i, cmd in ipairs(commands) do
-		local trimmed = vim.trim(cmd)
-		if trimmed ~= "" then commands[i] = trimmed end
-	end
-
-	vim.defer_fn(function()
-		M.show_floaterm(floatstate)
-
-		for _, cmd in ipairs(commands) do
-			vim.fn.chansend(floatstate.chan, cmd .. "\n")
+	vim.api.nvim_create_autocmd("TermEnter", {
+		once = true,
+		callback = function()
+			vim.defer_fn(function()
+				vim.fn.chansend(floatstate.chan, command .. "\n")
+			end, 50)
 		end
-	end, 80)
+	})
+
+	M.show_floaterm(floatstate)
 end
 
 
@@ -67,21 +62,11 @@ M.create_termbuf = function(floatstate, cwd)
 
 	floatstate.buf = vim.api.nvim_create_buf(false, true)
 
-	local win = vim.api.nvim_open_win(floatstate.buf, false, {
-		relative = "editor",
-		width = 1,
-		height = 1,
-		row = 0,
-		col = 0,
-		style = "minimal",
-		border = "none"
-	})
-
 	vim.api.nvim_buf_call(floatstate.buf, function()
-		floatstate.chan = vim.fn.termopen(os.getenv("SHELL") or "sh", { cwd = cwd })
+		floatstate.chan = vim.fn.jobstart(os.getenv("SHELL") or "sh",
+			{ term = true, cwd = cwd }
+		)
 	end)
-
-	vim.api.nvim_win_close(win, true)
 end
 
 return M

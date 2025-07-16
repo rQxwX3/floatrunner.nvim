@@ -56,7 +56,7 @@ end
 
 
 M.floatrun = function()
-	local command = fileutils.getruncmd(langs)
+	local command = fileutils.get_run_cmd(langs)
 
 	if command then
 		floaterm.run_in_floaterm(state.floaterm, command)
@@ -67,7 +67,7 @@ end
 
 
 M.floatbuild = function()
-	local build = buildutils.getbuildcmd(builds)
+	local build = buildutils.get_build_cmd(builds)
 
 	if not build then return end
 

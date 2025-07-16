@@ -1,6 +1,6 @@
 local M = {}
 
-M.getruncmd = function(langs)
+M.get_run_cmd = function(langs)
 	local ext = vim.fn.expand("%:e")
 	local lang = nil
 

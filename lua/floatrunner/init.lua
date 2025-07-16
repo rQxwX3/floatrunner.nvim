@@ -1,7 +1,7 @@
 local floaterm = require "floatrunner.floaterm"
 local fileutils = require "floatrunner.internal.fileutils"
 local buildutils = require "floatrunner.internal.buildutils"
-local defaults = require "floatrunner.defaults"
+local config = require "floatrunner.config"
 
 local M = {}
 
@@ -13,17 +13,10 @@ local state = {
 	}
 }
 
-local langs = defaults.langs
-local maps = defaults.maps
-local builds = defaults.builds
-
 M.setup = function(opts)
-	opts = opts or {}
+	config.set(opts)
 
-	if opts then
-		if opts.langs then langs = opts.langs end
-		if opts.maps then maps = opts.maps end
-	end
+	local maps = config.get().maps
 
 	vim.keymap.set("n", maps.floaterm_on, M.toggle_floaterm,
 		{ noremap = true, silent = true })
@@ -56,7 +49,7 @@ end
 
 
 M.floatrun = function()
-	local command = fileutils.get_run_cmd(langs)
+	local command = fileutils.get_run_cmd(config.get().langs)
 
 	if command then
 		floaterm.run_in_floaterm(state.floaterm, command)
@@ -67,7 +60,7 @@ end
 
 
 M.floatbuild = function()
-	local build = buildutils.get_build_cmd(builds)
+	local build = buildutils.get_build_cmd(config.get().builds)
 
 	if not build then return end
 

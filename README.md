@@ -14,7 +14,7 @@ inside a floating terminal **inside** Neovim.
 - Making changes to a file
 - ~~Quiting Neovim~~
 - ~~Running command(s) (or spamming ⬆️)~~ **Hitting three keys**
-- See the errors, and question even trying to become a SWE
+- Seeing the errors, and questioning even trying to become a SWE
 - ~~Open Neovim~~
 
 While there definitely were other options for the same use case, I decided to build everything from scratch, to configure everything to my liking, and (hopefully) learn more about Neovim.

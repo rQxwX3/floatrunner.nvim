@@ -1,12 +1,21 @@
+local types = require "floatrunner.types.floaterm-types"
+
+---@class FloaTermModule
 local M = {}
 
-
+---Check if FloaTerm has valid Window and Buffer
+---@param floatstate FloatState
+---@return boolean
 M.is_valid_floaterm = function(floatstate)
 	return vim.api.nvim_buf_is_valid(floatstate.buf) and
 			vim.api.nvim_win_is_valid(floatstate.win)
 end
 
 
+---Runs a command in FloaTerm
+---@param floatstate	FloatState
+---@param command			string				Command to be run
+---@param cwd?				string				Directory in which command should be run
 M.run_in_floaterm = function(floatstate, command, cwd)
 	cwd = cwd or vim.loop.cwd()
 
@@ -27,6 +36,8 @@ M.run_in_floaterm = function(floatstate, command, cwd)
 end
 
 
+---Shows FloaTerm to the user
+---@param floatstate FloatState
 M.show_floaterm = function(floatstate)
 	if M.is_valid_floaterm(floatstate) then return end
 
@@ -57,6 +68,9 @@ M.show_floaterm = function(floatstate)
 end
 
 
+---Creates Buffer for FloaTerm
+---@param floatstate	FloatState
+---@param cwd?				string				Current working directory for FloaTerm
 M.create_termbuf = function(floatstate, cwd)
 	cwd = cwd or vim.loop.cwd()
 

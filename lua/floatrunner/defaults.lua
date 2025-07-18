@@ -1,5 +1,9 @@
+local types = require "floatrunner.types.config-types"
+
+---@type Options		Table of default configuration options
 local M = {}
 
+---@type LangConfig[]
 M.langs = {
 	{
 		exts = { "c" },
@@ -13,6 +17,7 @@ M.langs = {
 	},
 }
 
+---@type BuildConfig[]
 M.builds = {
 	{
 		filename = "Makefile",
@@ -20,6 +25,7 @@ M.builds = {
 	}
 }
 
+---@type MapConfig
 M.maps = {
 	floaterm_on = "<leader>tt",
 	floaterm_off = "<esc><esc>",

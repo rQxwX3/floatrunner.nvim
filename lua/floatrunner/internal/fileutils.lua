@@ -1,5 +1,10 @@
+local config_types = require "floatrunner.types.config-types"
+
 local M = {}
 
+---Finds and returns command to run the file
+---@param langs LangConfig[]		--List of language configurations
+---@return			string					--Command to run
 M.get_run_cmd = function(langs)
 	local ext = vim.fn.expand("%:e")
 	local lang = nil
@@ -16,7 +21,7 @@ M.get_run_cmd = function(langs)
 	if not lang then
 		local warnstring = string.format("No entry for ext: %s", ext)
 		vim.notify(warnstring, vim.log.levels.WARN)
-		return
+		return ""
 	end
 
 	local argv = vim.deepcopy(lang.argv)
@@ -33,7 +38,7 @@ M.get_run_cmd = function(langs)
 	else
 		local warnstring = string.format("No command for ext: %s", ext)
 		vim.notify(warnstring, vim.log.levels.WARN)
-		return
+		return ""
 	end
 
 	return cmdstring

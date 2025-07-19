@@ -37,7 +37,7 @@ While there definitely were other options for the same use case, I decided to bu
 There are three things you can configure in ```floatrunner.nvim```: keymaps, languages supported, and build scripts scenarios. Those are configured using ```maps```, ```langs```, and ```builds``` lua tables respectively. Here's a part of the default configuration:
 
 ```lua
-require("floatrunner").setup(
+require("floatrunner").setup({
   maps = {
     floaterm_on = "<leader>tt",
     floaterm_off = "<esc><esc>",
@@ -54,7 +54,7 @@ require("floatrunner").setup(
   builds = {
     { filename = "Makefile", command = "make" }
   }
-)
+})
 ```
 ### Maps
 Here's the full list of the available actions for mapping:

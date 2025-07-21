@@ -1,1 +1,125 @@
-*floatrunner.nvim*
+*floatrunner.txt*    Plugin for running and building code inside Neovim
+
+==============================================================================
+CONTENTS                                                      *floatrunner-contents*
+
+  1. Introduction         |floatrunner-intro|
+  2. Installation         |floatrunner-install|
+  3. Configuration        |floatrunner-config|
+  4. Commands             |floatrunner-commands|
+  5. Keymaps              |floatrunner-keymaps|
+  6. API (Lua)            |floatrunner-api|
+
+==============================================================================
+INTRODUCTION                                                  *floatrunner-intro*
+
+FloatRunner is a Neovim plugin for running project-local build or run commands
+inside a floating terminal window. It detects build files like Makefile,
+build.sh, or custom scripts, and provides a unified interface to run them. It 
+accomodates for running standalone files outside of project directories.
+
+==============================================================================
+INSTALLATION                                                  *floatrunner-install*
+
+Using lazy.nvim:
+
+>lua
+{
+  "rQxwX3/floatrunner.nvim",
+  config = function()
+    require("floatrunner").setup()
+  end
+}
+
+==============================================================================
+CONFIGURATION                                                 *floatrunner-config*
+
+Call `setup()` with a table of options:
+
+>lua
+require("floatrunner").setup({
+  builds = {
+    ["Makefile"] = "make",
+    ["build.sh"] = "sh build.sh",
+    ["package.json"] = "npm run build",
+  },
+  maps = {
+    floatrun = "<leader>r",
+    floatbuild = "<leader>b",
+    floaterm_on = "<leader>t",
+		floaterm_off = "<Esc>",
+  },
+  langs = {
+		{
+			exts = {"c"},
+			command = "gcc %s -o %s && ./%s",
+			argv = { "%.", "%", "%" }
+		}
+	}
+})
+
+OPTIONS:
+
+• `builds`: table<string, string>
+  A map of build file names to commands.
+
+• `maps`: table<string, string>
+  Keymaps to trigger plugin functions. All keys are optional.
+
+• `langs`: table<table<string>, string, table<string>>
+	Table of languages supported by :FloatRunner run command.
+
+	`Fields`:
+		• `exts`: Table of file extensions.
+
+		• `command`: C-like string command to be run on a file. 
+			Use `%s` format specificator for arguments.
+
+		• `argv`: Table of string subsitutions to `command` format specificators.
+			Use `%.` for the current file including extension.
+			Use `%`  for the current file without extension.
+ 
+==============================================================================
+COMMANDS                                                     *floatrunner-commands*
+
+:FloatRunner run        Run the selected build command
+:FloatRunner build      Alias for :FloatRunner run
+:FloatRunner toggle     Toggle the floating terminal window
+:FloatRunner help       Show usage tips
+
+==============================================================================
+KEYMAPS                                                      *floatrunner-keymaps*
+
+These commands are available to assign keymaps to in the `maps` config table:
+
+  - `floatrun`: Runs the current file command
+  - `floatbuild`: Builds the project the current file is a part of
+  - `floaterm_on`: Opens the floating terminal
+  - `floaterm_off`: Closes the terminal from terminal mode
+
+Example:
+
+>lua
+maps = {
+  floatrun = "<leader>fr",
+  floatbuild = "<leader>fb",
+  floaterm_on = "<leader>tt",
+  floaterm_off = "<Esc><Esc>",
+}
+
+==============================================================================
+API (Lua)                                                    *floatrunner-api*
+
+The following functions are available if you want to use FloatRunner programmatically:
+
+>lua
+local M = require("floatrunner")
+
+M.setup(opts)              -- Initialize the plugin
+M.floatrun()               -- Run the configured build command
+M.toggle_floaterm()        -- Toggle terminal visibility
+M.floatbuild()             -- Alias for floatrun()
+
+==============================================================================
+
+vim:tw=78:ts=2:ft=help:norl

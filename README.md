@@ -41,6 +41,8 @@ Try these commands to see if installation went successfull:
 ```
 **Note**: the two latter commands are expected to result in a warning printed to you screen due to lack of configuration.
 
+Run ```:help floatrunner``` to see more information on usage.
+
 ## ⚙️ Configuration
 
 There is no default configuration provided in ```floatrunner.nvim```. Feel free to configure everything to your liking: keymaps, languages supported, and build scripts scenarios. Those are configured using ```maps```, ```langs```, and ```builds``` lua tables respectively. Here's an example configuration:

@@ -16,35 +16,19 @@ M.setup = function(opts)
 
 	config.set(opts)
 
-	local maps = config.get().maps
+	M.set_keymaps(config.get().maps)
+	M.create_user_commands()
+end
 
-	-- Set keymaps if any are passed to config
-	if maps then
-		vim.keymap.set("n", maps.floaterm_on, M.toggle_floaterm,
-			{ noremap = true, silent = true })
-		vim.keymap.set("n", maps.floatrun, M.floatrun,
-			{ noremap = true, silent = true })
-		vim.keymap.set("n", maps.floatbuild, M.floatbuild,
-			{ noremap = true, silent = true })
 
-		-- Do not set the keymap for term buffer unless it is floaterm
-		vim.api.nvim_create_autocmd("TermOpen", {
-			callback = function(event)
-				if event.buf == state.buf then
-					vim.keymap.set("t", maps.floaterm_off, M.toggle_floaterm,
-						{ buffer = event.buf, noremap = true, silent = true })
-				end
-			end,
-		})
-	end
-
+---Creates user commands (FloatRunner command with subcommands)
+M.create_user_commands = function()
 	local subcommands = {
 		toggle = M.toggle_floaterm,
 		run = M.floatrun,
 		build = M.floatbuild
 	}
 
-	-- Create user commands
 	vim.api.nvim_create_user_command("FloatRunner", function(args)
 		local sub = args.fargs[1]
 
@@ -56,6 +40,39 @@ M.setup = function(opts)
 		end
 	end, { nargs = 1 })
 end
+
+
+---Sets keymaps (if any were passed)
+---@param maps MapConfig
+M.set_keymaps = function(maps)
+	maps = maps or {}
+
+	if maps.floaterm_on then
+		vim.keymap.set("n", maps.floaterm_on, M.toggle_floaterm,
+			{ noremap = true, silent = true })
+	end
+	if maps.floatrun then
+		vim.keymap.set("n", maps.floatrun, M.floatrun,
+			{ noremap = true, silent = true })
+	end
+	if maps.floatbuild then
+		vim.keymap.set("n", maps.floatbuild, M.floatbuild,
+			{ noremap = true, silent = true })
+	end
+
+	if maps.floaterm_off then
+		-- Do not set the keymap for term buffer unless it is floaterm
+		vim.api.nvim_create_autocmd("TermOpen", {
+			callback = function(event)
+				if event.buf == state.buf then
+					vim.keymap.set("t", maps.floaterm_off, M.toggle_floaterm,
+						{ buffer = event.buf, noremap = true, silent = true })
+				end
+			end,
+		})
+	end
+end
+
 
 ---Shows or hides FloaTerm
 M.toggle_floaterm = function()

@@ -1,22 +1,14 @@
 local types = require "floatrunner.types.config-types"
-local defaults = require "floatrunner.defaults"
 
-local M = {
-	opts = vim.deepcopy(defaults)
-}
+local M = {}
 
 ---Sets configuration to user options
 ---@param user_opts? Options
 M.set = function(user_opts)
-	user_opts = user_opts or {}
-
-	M.opts = vim.tbl_deep_extend(
-		"force", vim.deepcopy(defaults), user_opts
-	)
+	M.opts = user_opts or {}
 end
 
-
----Return configuration to caller
+---Returns configuration to caller
 ---@return Options
 M.get = function() return M.opts end
 

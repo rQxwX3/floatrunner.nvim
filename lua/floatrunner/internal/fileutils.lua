@@ -4,8 +4,10 @@ local M = {}
 
 ---Finds and returns command to run the file
 ---@param langs LangConfig[]		--List of language configurations
----@return			string					--Command to run
+---@return			string | nil					--Command to run
 M.get_run_cmd = function(langs)
+	if not langs then return nil end
+
 	local ext = vim.fn.expand("%:e")
 	local lang = nil
 
@@ -18,11 +20,7 @@ M.get_run_cmd = function(langs)
 		end
 	end
 
-	if not lang then
-		local warnstring = string.format("No entry for ext: %s", ext)
-		vim.notify(warnstring, vim.log.levels.WARN)
-		return ""
-	end
+	if not lang then return nil end
 
 	local argv = vim.deepcopy(lang.argv)
 	for i, arg in ipairs(argv) do
@@ -30,15 +28,11 @@ M.get_run_cmd = function(langs)
 		if arg == "%." then argv[i] = vim.fn.expand("%") end
 	end
 
-	local cmdstring = ""
+	local cmdstring = nil
 
 	if lang.command then
 		local unpack = table.unpack or unpack
 		cmdstring = string.format(lang.command, unpack(argv))
-	else
-		local warnstring = string.format("No command for ext: %s", ext)
-		vim.notify(warnstring, vim.log.levels.WARN)
-		return ""
 	end
 
 	return cmdstring

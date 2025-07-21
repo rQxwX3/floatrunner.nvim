@@ -40,6 +40,8 @@ end
 ---@param builds BuildConfig[]		List of set build configurations
 ---@return BuildConfig | nil
 M.get_build_cmd = function(builds)
+	if not builds then return nil end
+
 	local init_path = Path:new(vim.fn.expand("%:p")):parent()
 
 	local cached = M.get_cached_build(init_path)

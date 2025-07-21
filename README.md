@@ -32,9 +32,18 @@ While there definitely were other options for the same use case, I decided to bu
 }
 ```
 
+## 🕹️ Usage
+Try these commands to see if installation went successfull:
+```
+:FloatRunner toggle
+:FloatRunner run
+:FloatRunner build
+```
+**Note**: the two latter commands are expected to result in a warning printed to you screen due to lack of configuration.
+
 ## ⚙️ Configuration
 
-There are three things you can configure in ```floatrunner.nvim```: keymaps, languages supported, and build scripts scenarios. Those are configured using ```maps```, ```langs```, and ```builds``` lua tables respectively. Here's a part of the default configuration:
+There is no default configuration provided in ```floatrunner.nvim```. Feel free to configure everything to your liking: keymaps, languages supported, and build scripts scenarios. Those are configured using ```maps```, ```langs```, and ```builds``` lua tables respectively. Here's an example configuration:
 
 ```lua
 require("floatrunner").setup({

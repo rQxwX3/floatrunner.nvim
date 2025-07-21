@@ -52,7 +52,7 @@ M.setup = function(opts)
 			subcommands[sub]()
 		else
 			vim.notify("FloatRunner: Invalid Command." ..
-				"Run 'FloatRunner help' to see available commands.", vim.log.levels.WARN)
+				"Run 'help floatrunner' to see available commands.", vim.log.levels.WARN)
 		end
 	end, { nargs = 1 })
 end

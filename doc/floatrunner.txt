@@ -82,10 +82,9 @@ OPTIONS:
 ==============================================================================
 COMMANDS                                                     *floatrunner-commands*
 
-:FloatRunner run        Run the selected build command
-:FloatRunner build      Alias for :FloatRunner run
+:FloatRunner run        Run the current file
+:FloatRunner build      Build the current project
 :FloatRunner toggle     Toggle the floating terminal window
-:FloatRunner help       Show usage tips
 
 ==============================================================================
 KEYMAPS                                                      *floatrunner-keymaps*

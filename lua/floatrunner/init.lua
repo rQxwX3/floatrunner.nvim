@@ -2,8 +2,6 @@ local floaterm_types = require "floatrunner.types.floaterm-types"
 local config_types = require "floatrunner.types.config-types"
 
 local floaterm = require "floatrunner.floaterm"
-local fileutils = require "floatrunner.internal.fileutils"
-local buildutils = require "floatrunner.internal.buildutils"
 local config = require "floatrunner.config"
 
 local M = {}
@@ -71,6 +69,7 @@ end
 
 ---Runs the current file
 M.floatrun = function()
+	local fileutils = require "floatrunner.internal.fileutils"
 	local command = fileutils.get_run_cmd(config.get().langs)
 
 	if command then
@@ -83,6 +82,7 @@ end
 
 ---Builds the current project
 M.floatbuild = function()
+	local buildutils = require "floatrunner.internal.buildutils"
 	local build = buildutils.get_build_cmd(config.get().builds)
 
 	if not build then

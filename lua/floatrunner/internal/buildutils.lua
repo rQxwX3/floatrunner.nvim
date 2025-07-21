@@ -1,7 +1,5 @@
 local config_types = require "floatrunner.types.config-types"
 
-local Path = require("plenary.path")
-
 local M = {}
 
 ---@class CachedBuild
@@ -16,7 +14,7 @@ M.builds_cache = {}
 ---@return						BuildConfig | nil
 M.get_cached_build = function(init_path)
 	for _, item in ipairs(M.builds_cache) do
-		if item.init_path == init_path:absolute() then
+		if item.init_path == init_path then
 			return item.build
 		end
 	end
@@ -30,45 +28,44 @@ end
 ---@param build			BuildConfig	Build configuration to cache
 M.cache_build = function(init_path, build)
 	table.insert(M.builds_cache, {
-		init_path = init_path:absolute(),
+		init_path = init_path,
 		build = build
 	})
 end
 
 
 ---Finds and return command to build the project
----@param builds BuildConfig[]		List of set build configurations
----@return BuildConfig | nil
+---@param builds BuildsMap			--Map of set build configurations
+---@return BuildConfig | nil		--Build configuration to use or nil
 M.get_build_cmd = function(builds)
 	if not builds then return nil end
 
-	local init_path = Path:new(vim.fn.expand("%:p")):parent()
+	local init_path = vim.fn.expand("%:p:h")
 
 	local cached = M.get_cached_build(init_path)
 	if cached then return cached end
 
-	local search_path = init_path
+	local new_build = {}
+	local buildfiles = {}
 
-	while search_path and search_path:absolute() ~= "/" do
-		for _, build in ipairs(builds) do
-			local candidate = search_path:joinpath(build.filename)
-
-			if candidate:exists() then
-				local new_build = {
-					path = search_path:absolute(),
-					command = build.command
-				}
-
-				M.cache_build(init_path, new_build)
-
-				return new_build
-			end
-		end
-
-		search_path = search_path:parent()
+	for filename, command in pairs(builds) do
+		table.insert(buildfiles, filename)
 	end
 
-	return nil
+	local buildfile_path = vim.fs.find(
+		buildfiles, { upward = true, type = "file" }
+	)[1]
+
+	if buildfile_path then
+		local path = vim.fn.fnamemodify(buildfile_path, ":p:h")
+		local filename = vim.fn.fnamemodify(buildfile_path, ":t")
+
+		new_build = { path = path, command = builds[filename] }
+
+		M.cache_build(init_path, new_build)
+	end
+
+	return new_build
 end
 
 return M

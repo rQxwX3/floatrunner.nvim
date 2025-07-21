@@ -1,6 +1,6 @@
 ---@class Options
 ---@field langs LangConfig[]
----@field builds BuildConfig[]
+---@field builds BuildsMap
 ---@field maps MapConfig
 ---
 ---@class LangConfig
@@ -9,9 +9,14 @@
 ---@field argv		string[]		Arguments for %s placeholders in command
 ---                           (use "%" for current file with NO extension,
 ---                           "%." to preserve extension)
+---
 ---@class BuildConfig
----@field filename	string		Build file name (with extension)
+---@field filename	string		Build file name (with extension)			
 ---@field command		string		Command to run
+---
+---
+---@class BuildsMap
+---@field [string] string			Key = build file name, value = command
 
 ---@class MapConfig
 ---@field floaterm_on		string		Show FloaTerm	

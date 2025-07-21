@@ -61,7 +61,7 @@ require("floatrunner").setup({
   },
 
   builds = {
-    { filename = "Makefile", command = "make" }
+    ["Makefile"] = "make"
   }
 })
 ```
@@ -80,7 +80,7 @@ As shown in the example config, ```floatrunner.nvim``` expects you to use ```%``
 **Note**: although ```gcc``` command uses the same argument twice, ```floatrunner.nvim``` expects as many arguments in ```argv``` as there are ```%s``` placeholders in ```command``` string.
 
 ### Builds
-Each build scenario is expected to be a lua table with string fields ```filename``` and ```command```, for the build file name, and command to run respectively.
+Each build scenario is expected to be key-value pair, consisting of the name of the build file (including extension), and the command to run respectively.
 
 ## Contributing
 Contributions are highly appreciated!

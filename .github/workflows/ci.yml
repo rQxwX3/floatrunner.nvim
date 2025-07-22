@@ -1,0 +1,22 @@
+name: Test floatrunner.nvim
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Neovim
+        run: |
+          sudo add-apt-repository ppa:neovim-ppa/stable -y
+          sudo apt update
+          sudo apt install neovim -y
+
+      - name: Run tests
+        run: make test

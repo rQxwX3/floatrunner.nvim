@@ -5,7 +5,7 @@ local noeq = MiniTest.expect.no_equality
 
 local T = new_set()
 
-T["setup()"] = new_set({
+T["init"] = new_set({
 	hooks = {
 		pre_case = function()
 			pcall(vim.api.nvim_del_keymap, "n", "floaterm_on")
@@ -16,7 +16,8 @@ T["setup()"] = new_set({
 	}
 })
 
-T["setup()"]["sets user options"] = function()
+
+T["init"]["sets user options"] = function()
 	require("floatrunner.init").setup({
 		maps = { floaterm_on = "<space>tt" },
 		builds = { ["Makefile"] = "make" },
@@ -33,7 +34,7 @@ T["setup()"]["sets user options"] = function()
 end
 
 
-T["setup()"]["registers user commands"] = function()
+T["init"]["registers user commands"] = function()
 	require("floatrunner.init").setup({})
 
 	local cmds = vim.api.nvim_get_commands({})
@@ -43,7 +44,8 @@ T["setup()"]["registers user commands"] = function()
 	eq(user_cmd.nargs, "1")
 end
 
-T["setup()"]["creates user keymaps"] = function()
+
+T["init"]["creates user keymaps"] = function()
 	require("floatrunner.init").setup({
 		maps = { floaterm_on = "floaterm_on" }
 	})
@@ -59,58 +61,138 @@ T["setup()"]["creates user keymaps"] = function()
 	eq(found, true)
 end
 
-T["utils"] = new_set({
+
+local tmpfile, tmpdir, builds, buildutils
+
+T["buildutils"] = new_set({
 	hooks = {
 		pre_case = function()
-			package.loaded["floatrunner.internal.fileutils"] = nil
+			tmpfile = "/tmp/floatrunner-test/build-test.c"
+			tmpdir = "/tmp/floatrunner-test"
+			builds = { ["Makefile"] = "make" }
+			buildutils = require("floatrunner.internal.buildutils")
+			buildutils.builds_cache = {}
+
+			vim.fn.mkdir(tmpdir, "p")
+			vim.loop.chdir(tmpdir)
+			vim.fn.writefile({ "# Dummy Makefile" }, tmpdir .. "/Makefile")
+			vim.cmd("edit " .. tmpfile)
+		end,
+
+		post_case = function()
+			vim.fs.rm(tmpdir, { recursive = true, force = true })
+
 			package.loaded["floatrunner.internal.buildutils"] = nil
 		end
 	}
 })
 
 
-T["utils"]["get_run_cmd()"] = function()
-	vim.cmd("enew")
+T["buildutils"]["gets build command from builds"] = function()
+	local result = buildutils.get_build_cmd(builds)
 
-	vim.api.nvim_buf_set_name(0, "main.c")
+	noeq(result, nil)
+	eq(result.path, vim.fn.resolve(tmpdir))
+	eq(result.command, "make")
+end
 
-	local langs = {
-		{ exts = { "c" }, command = "command", argv = {} }
+
+T["buildutils"]["caches build command"] = function()
+	buildutils.get_build_cmd(builds)
+
+	local cached = buildutils.get_cached_build(tmpdir)
+
+	eq(cached, { command = "make", path = vim.fn.resolve(tmpdir) })
+end
+
+
+T["buildutils"]["gets build command from cache"] = function()
+	builds = { ["Makefile"] = "make from cache" }
+	buildutils.get_build_cmd(builds)
+
+	builds = { ["Makefile"] = "make" }
+
+	local result = buildutils.get_build_cmd(builds)
+
+	eq(result.command, "make from cache")
+end
+
+
+T["fileutils"] = new_set({
+	hooks = {
+		pre_case = function()
+			tmpfile = "/tmp/floatrunner-test/build-test.c"
+			tmpdir = "/tmp/floatrunner-test"
+
+			vim.fn.mkdir(tmpdir, "p")
+			vim.loop.chdir(tmpdir)
+			vim.cmd("edit " .. tmpfile)
+		end,
+
+		post_case = function()
+			vim.fs.rm(tmpdir, { recursive = true, force = true })
+
+			package.loaded["floatrunner.internal.fileutils"] = nil
+		end
 	}
+})
 
+T["fileutils"]["gets run command"] = function()
+	local langs = { { exts = { "c" }, command = "command", argv = {} } }
 	local res = require("floatrunner.internal.fileutils").get_run_cmd(langs)
 
 	eq(res, "command")
 end
 
 
-T["utils"]["get_build_cmd()"] = function()
-	local tmpfile = "/tmp/floatrunner-test/build-test.c"
-	local tmpdir = "/tmp/floatrunner-test"
+local floatstate, cwd
 
-	vim.cmd("enew")
+T["floaterm"] = new_set({
+	hooks = {
+		pre_case = function()
+			floatstate = { buf = -1, chan = -1, win = -1 }
+			cwd = "/tmp/floatstate-test"
+			vim.fn.mkdir(cwd, "p")
+		end,
 
-	vim.api.nvim_buf_set_name(0, tmpfile)
-	vim.fn.mkdir("/tmp/floatrunner-test", "p")
-	vim.loop.chdir(tmpdir)
-	vim.fn.writefile({ "# Dummy Makefile" }, "/tmp/floatrunner-test/Makefile")
+		post_case = function()
+			vim.fs.rm(cwd, { recursive = true, force = true })
 
-	local buildutils = require("floatrunner.internal.buildutils")
+			if vim.api.nvim_buf_is_loaded(floatstate.buf) then
+				vim.api.nvim_buf_delete(floatstate.buf, { force = true })
+			end
 
-	buildutils.builds_cache = {}
+			package.loaded["floatrunner.floaterm"] = nil
+		end
+	}
+})
 
-	local builds = { ["Makefile"] = "make command" }
 
-	vim.cmd("edit " .. tmpfile)
+T["floaterm"]["creates valid buffer"] = function()
+	require("floatrunner.floaterm").show_floaterm(floatstate)
+	local bufs = vim.api.nvim_list_bufs()
 
-	local result = buildutils.get_build_cmd(builds)
-
-	noeq(result, nil)
-	eq(result.path, vim.fn.resolve(tmpdir))
-	eq(result.command, "make command")
-
-	local cached = buildutils.get_cached_build(tmpdir)
-	eq(cached, result)
+	eq(vim.api.nvim_buf_is_valid(floatstate.buf), true)
+	noeq(bufs[floatstate.buf], nil)
+	eq(vim.api.nvim_get_option_value("buftype", { buf = floatstate.buf }), "terminal")
 end
+
+
+T["floaterm"]["creates valid window"] = function()
+	require("floatrunner.floaterm").show_floaterm(floatstate)
+	local wins = vim.api.nvim_list_wins()
+
+	eq(vim.api.nvim_win_is_valid(floatstate.win), true)
+	eq(vim.api.nvim_get_mode().mode, "nt")
+end
+
+
+T["floaterm"]["doesn't create terminal if one already exists"] = function()
+	require("floatrunner.floaterm").show_floaterm(floatstate)
+	local existing_floatstate = floatstate
+	require("floatrunner.floaterm").show_floaterm(floatstate)
+	eq(floatstate, existing_floatstate)
+end
+
 
 return T

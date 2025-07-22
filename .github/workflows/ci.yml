@@ -17,7 +17,7 @@ jobs:
           curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
           chmod u+x nvim.appimage
           sudo mv nvim.appimage /usr/local/bin/nvim
-          nvim --version          sudo add-apt-repository ppa:neovim-ppa/stable -y
+          nvim --version
 
       - name: Run tests
         run: make test

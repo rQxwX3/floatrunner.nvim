@@ -2,7 +2,8 @@
 Your keymap is ~~my~~ **your** command
 
 
-https://github.com/user-attachments/assets/ce3986ed-700d-45c3-8f6f-d973fc73bbd8
+![floatrunner-demo](https://github.com/user-attachments/assets/72a0aabd-5a55-48d5-89ee-7f0d3bd04c78)
+
 
 
 ## What is Floatrunner?

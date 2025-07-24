@@ -19,6 +19,10 @@ inside a floating terminal **inside** Neovim.
 
 While there definitely were other options for the same use case, I decided to build everything from scratch, to configure all to my liking, and (hopefully) learn more about Neovim.
 
+## 🗝 Requirements
+
+- **Neovim 0.8+**
+
 ## 📦 Installation
 
 ### Using [lazy.nvim](https://github.com/folke/lazy.nvim)

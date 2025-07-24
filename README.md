@@ -1,6 +1,10 @@
 # fl🎈at👟ner.nvim
 Your keymap is ~~my~~ **your** command
 
+
+https://github.com/user-attachments/assets/ce3986ed-700d-45c3-8f6f-d973fc73bbd8
+
+
 ## What is Floatrunner?
 ```floatrunner.nvim``` is a Neovim plugin for running:
 - build scripts (build.sh, Makefile, CMake, etc)

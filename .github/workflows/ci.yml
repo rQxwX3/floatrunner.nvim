@@ -7,7 +7,11 @@ on:
 
 jobs:
   unit-test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        nvim-version: [v0.8.0, nightly]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -16,7 +20,7 @@ jobs:
         uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
-          version: v0.8.0
+          version: ${{ matrix.nvim-version }}
 
       - name: Run tests
         run: make test

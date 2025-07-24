@@ -173,7 +173,7 @@ T["floaterm"]["creates valid buffer"] = function()
 
 	eq(vim.api.nvim_buf_is_valid(floatstate.buf), true)
 	noeq(bufs[floatstate.buf], nil)
-	--eq(vim.api.nvim_get_option_value("buftype", { buf = floatstate.buf }), "terminal")
+	eq(vim.api.nvim_get_option_value("buftype", { buf = floatstate.buf }), "terminal")
 end
 
 

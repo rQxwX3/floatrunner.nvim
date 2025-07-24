@@ -12,12 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Neovim
-        run: |
-          curl -LO https://github.com/neovim/neovim/releases/download/v0.10.3/nvim-linux-x86_64.appimage
-          chmod u+x nvim-linux-x86_64.appimage
-          sudo mv nvim-linux-x86_64.appimage /usr/local/bin/nvim
-          nvim --version
+      - name: Setup Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: v0.10.3
 
       - name: Run tests
         run: make test

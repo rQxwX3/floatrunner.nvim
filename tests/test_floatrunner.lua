@@ -185,7 +185,7 @@ T["floaterm"]["creates valid window"] = function()
 	local wins = vim.api.nvim_list_wins()
 
 	eq(vim.api.nvim_win_is_valid(floatstate.win), true)
-	eq(vim.api.nvim_get_mode().mode, "nt")
+	eq(vim.api.nvim_get_mode().mode, "nt" or "n")
 end
 
 

@@ -80,7 +80,6 @@ T["buildutils"] = new_set({
 		end,
 
 		post_case = function()
-			--vim.fs.rm(tmpdir, { recursive = true, force = true })
 			os.execute("rm -rf " .. tmpdir)
 			package.loaded["floatrunner.internal.buildutils"] = nil
 		end
@@ -130,7 +129,6 @@ T["fileutils"] = new_set({
 		end,
 
 		post_case = function()
-			--vim.fs.rm(tmpdir, { recursive = true, force = true })
 			os.execute("rm -rf " .. tmpdir)
 
 			package.loaded["floatrunner.internal.fileutils"] = nil
@@ -157,7 +155,6 @@ T["floaterm"] = new_set({
 		end,
 
 		post_case = function()
-			--vim.fs.rm(cwd, { recursive = true, force = true })
 			os.execute("rm -rf " .. tmpdir)
 
 			if vim.api.nvim_buf_is_loaded(floatstate.buf) then

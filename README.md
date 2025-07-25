@@ -19,7 +19,6 @@ inside a floating terminal **inside** Neovim.
 - Make changes to a file
 - ~~Quit Neovim~~
 - ~~Run command(s) (or spam ⬆️)~~ **Hit three keys**
-- See the errors, and question even trying to become a SWE
 - ~~Open Neovim~~
 
 While there definitely were other options for the same use case, I decided to build everything from scratch, to configure all to my liking, and (hopefully) learn more about Neovim.
@@ -103,3 +102,4 @@ Contributions are highly appreciated!
 - Refactor LuaCATS docs
 - Change getbuildcmd() behavior to look until ~ instead of /
 - Reconsider .gitignore
+- Refactor tests

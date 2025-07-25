@@ -5,8 +5,7 @@ Your keymap is ~~my~~ **your** command
 ![floatrunner-demo](https://github.com/user-attachments/assets/72a0aabd-5a55-48d5-89ee-7f0d3bd04c78)
 
 
-
-## What is Floatrunner?
+## What is floatrunner.nvim?
 ```floatrunner.nvim``` is a Neovim plugin for running:
 - build scripts (build.sh, Makefile, CMake, etc)
 - compiler commands (gcc, g++, rustc, javac, etc)
@@ -14,7 +13,7 @@ Your keymap is ~~my~~ **your** command
 
 inside a floating terminal **inside** Neovim.
 
-## Why Floatrunner?
+## Why floatrunner.nvim?
 ```floatrunner.nvim``` reduces my typical workflow:
 - Make changes to a file
 - ~~Quit Neovim~~

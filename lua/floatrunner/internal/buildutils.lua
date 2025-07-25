@@ -53,7 +53,7 @@ M.get_build_cmd = function(builds)
 	end
 
 	local buildfile_path = vim.fs.find(
-		buildfiles, { upward = true, type = "file" }
+		buildfiles, { path = init_path, upward = true, type = "file", stop = "~" }
 	)[1]
 
 	if buildfile_path then

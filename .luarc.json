@@ -1,0 +1,8 @@
+{
+    "diagnostics.disable": [
+        "undefined-field",
+        "unused-local",
+        "missing-fields",
+        "need-check-nil"
+    ]
+}

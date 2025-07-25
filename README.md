@@ -24,7 +24,7 @@ While there definitely were other options for the same use case, I decided to bu
 
 ## 🗝 Requirements
 
-- **Neovim 0.8+**
+- **Neovim v0.8+**
 
 ## 📦 Installation
 

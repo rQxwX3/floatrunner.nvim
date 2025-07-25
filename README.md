@@ -95,3 +95,11 @@ Each build scenario is expected to be a key-value pair, consisting of the name o
 
 ## Contributing
 Contributions are highly appreciated!
+
+## TODO
+- Fix terminal creation on Linux
+- Make build files findable from directories that contain the project
+- Add window creation configuration
+- Refactor LuaCATS docs
+- Change getbuildcmd() behavior to look until ~ instead of /
+- Reconsider .gitignore

@@ -91,7 +91,7 @@ T["buildutils"]["gets build command from builds"] = function()
 	local result = buildutils.get_build_cmd(builds)
 
 	noeq(result, nil)
-	eq(result.path, vim.fn.resolve(tmpdir))
+	eq(result.path, tmpdir)
 	eq(result.command, "make")
 end
 
@@ -101,7 +101,7 @@ T["buildutils"]["caches build command"] = function()
 
 	local cached = buildutils.get_cached_build(tmpdir)
 
-	eq(cached, { command = "make", path = vim.fn.resolve(tmpdir) })
+	eq(cached, { command = "make", path = tmpdir })
 end
 
 

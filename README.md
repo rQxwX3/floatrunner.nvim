@@ -5,8 +5,7 @@ Your keymap is ~~my~~ **your** command
 ![floatrunner-demo](https://github.com/user-attachments/assets/72a0aabd-5a55-48d5-89ee-7f0d3bd04c78)
 
 
-
-## What is Floatrunner?
+## What is floatrunner.nvim?
 ```floatrunner.nvim``` is a Neovim plugin for running:
 - build scripts (build.sh, Makefile, CMake, etc)
 - compiler commands (gcc, g++, rustc, javac, etc)
@@ -14,19 +13,18 @@ Your keymap is ~~my~~ **your** command
 
 inside a floating terminal **inside** Neovim.
 
-## Why Floatrunner?
+## Why floatrunner.nvim?
 ```floatrunner.nvim``` reduces my typical workflow:
 - Make changes to a file
 - ~~Quit Neovim~~
 - ~~Run command(s) (or spam ⬆️)~~ **Hit three keys**
-- See the errors, and question even trying to become a SWE
 - ~~Open Neovim~~
 
 While there definitely were other options for the same use case, I decided to build everything from scratch, to configure all to my liking, and (hopefully) learn more about Neovim.
 
 ## 🗝 Requirements
 
-- **Neovim 0.8+**
+- **Neovim v0.8+**
 
 ## 📦 Installation
 
@@ -103,3 +101,4 @@ Contributions are highly appreciated!
 - Refactor LuaCATS docs
 - Change getbuildcmd() behavior to look until ~ instead of /
 - Reconsider .gitignore
+- Refactor tests

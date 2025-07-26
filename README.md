@@ -24,7 +24,7 @@ While there definitely are [other options](#similar-projects) for the same use c
 
 ## 🗝 Requirements
 
-- **Neovim v0.8+**
+- **Neovim v0.11+**
 
 ## 📦 Installation
 

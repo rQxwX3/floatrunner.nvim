@@ -1,5 +1,5 @@
 # fl🎈at👟ner.nvim
-Your keymap is ~~my~~ **your** command
+**Your keymap is your command**
 
 
 ![floatrunner-demo](https://github.com/user-attachments/assets/72a0aabd-5a55-48d5-89ee-7f0d3bd04c78)
@@ -9,18 +9,18 @@ Your keymap is ~~my~~ **your** command
 ```floatrunner.nvim``` is a Neovim plugin for running:
 - build scripts (build.sh, Makefile, CMake, etc)
 - compiler commands (gcc, g++, rustc, javac, etc)
-- your programs (./**anything**)
+- your programs (./anything)
 
-inside a floating terminal **inside** Neovim.
+inside a floating terminal inside Neovim.
 
 ## Why floatrunner.nvim?
 ```floatrunner.nvim``` reduces my typical workflow:
 - Make changes to a file
 - ~~Quit Neovim~~
-- ~~Run command(s) (or spam ⬆️)~~ **Hit three keys**
+- ~~Run command(s)~~ **Hit three keys**
 - ~~Open Neovim~~
 
-While there definitely were other options for the same use case, I decided to build everything from scratch, to configure all to my liking, and (hopefully) learn more about Neovim.
+While there definitely are [other options](#similar-projects) for the same use case, I decided to build everything from scratch, to configure all to my liking, and (hopefully) learn more about Neovim.
 
 ## 🗝 Requirements
 
@@ -46,7 +46,7 @@ Try these commands to see if installation went successfull:
 :FloatRunner run
 :FloatRunner build
 ```
-**Note**: the two latter commands are expected to result in a warning printed to you screen due to lack of configuration.
+**Note**: the two latter commands are expected to result in a warning if no configuration is provided.
 
 Run ```:help floatrunner``` to see more information on usage.
 
@@ -91,14 +91,21 @@ As shown in the example config, ```floatrunner.nvim``` expects you to use ```%``
 ### Builds
 Each build scenario is expected to be a key-value pair, consisting of the name of the build file (including extension), and the command to run respectively.
 
-## Contributing
-Contributions are highly appreciated!
+## Credits
+### Similar projects
+- [FTerm.nvim](https://github.com/numToStr/FTerm.nvim) by numToStr
+- [toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim) by akinsho
+- [Compiler.nvim](https://github.com/Zeioth/compiler.nvim) by Zeioth
+- [Code_Runner](https://github.com/CRAG666/code_runner.nvim) by CRAG666
+
+### Special thanks
+- TJ DeVries for [Advent of Neovim](https://youtube.com/playlist?list=PLep05UYkc6wTyBe7kPjQFWVXTlhKeQejM&feature=shared) series that inspired this project
 
 ## TODO
 - Fix terminal creation on Linux
-- Make build files findable from directories that contain the project
+- ~~Make build files findable from directories that contain the project~~
 - Add window creation configuration
 - Refactor LuaCATS docs
-- Change getbuildcmd() behavior to look until ~ instead of /
-- Reconsider .gitignore
+- ~~Change getbuildcmd() behavior to look until ~ instead of /~~
+- ~~Reconsider .gitignore~~
 - Refactor tests

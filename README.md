@@ -102,10 +102,11 @@ Each build scenario is expected to be a key-value pair, consisting of the name o
 - TJ DeVries for [Advent of Neovim](https://youtube.com/playlist?list=PLep05UYkc6wTyBe7kPjQFWVXTlhKeQejM&feature=shared) series that inspired this project
 
 ## TODO
-- Fix terminal creation on Linux
+- ~~Fix terminal creation on Linux~~
 - ~~Make build files findable from directories that contain the project~~
 - Add window creation configuration
 - Refactor LuaCATS docs
 - ~~Change getbuildcmd() behavior to look until ~ instead of /~~
 - ~~Reconsider .gitignore~~
 - Refactor tests
+- Add debugging commands

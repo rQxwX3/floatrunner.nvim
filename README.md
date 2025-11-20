@@ -1,15 +1,14 @@
-# fl🎈at👟ner.nvim
-**Your keymap is your command**
+# floatrunner.nvim
 
 
 ![floatrunner-demo](https://github.com/user-attachments/assets/72a0aabd-5a55-48d5-89ee-7f0d3bd04c78)
 
 
 ## What is floatrunner.nvim?
-```floatrunner.nvim``` is a Neovim plugin for running:
+```floatrunner.nvim``` is a Neovim plugin for running
 - build scripts (build.sh, Makefile, CMake, etc)
 - compiler commands (gcc, g++, rustc, javac, etc)
-- your programs (./anything)
+- any other programs
 
 inside a floating terminal inside Neovim.
 
@@ -17,16 +16,16 @@ inside a floating terminal inside Neovim.
 ```floatrunner.nvim``` reduces my typical workflow:
 - Make changes to a file
 - ~~Quit Neovim~~
-- ~~Run command(s)~~ **Hit three keys**
+- ~~Run command(s)~~ **Hit a keymap**
 - ~~Open Neovim~~
 
 While there definitely are [other options](#similar-projects) for the same use case, I decided to build everything from scratch, to configure all to my liking, and (hopefully) learn more about Neovim.
 
-## 🗝 Requirements
+## Requirements
 
 - **Neovim v0.11+**
 
-## 📦 Installation
+## Installation
 
 ### Using [lazy.nvim](https://github.com/folke/lazy.nvim)
 
@@ -39,7 +38,7 @@ While there definitely are [other options](#similar-projects) for the same use c
 }
 ```
 
-## 🕹️ Usage
+## Usage
 Try these commands to see if installation went successfull:
 ```
 :FloatRunner toggle
@@ -50,7 +49,7 @@ Try these commands to see if installation went successfull:
 
 Run ```:help floatrunner``` to see more information on usage.
 
-## ⚙️ Configuration
+## Configuration
 
 There is no default configuration provided in ```floatrunner.nvim```. Feel free to configure everything to your liking: keymaps, languages supported, and build scripts scenarios. Those are configured using ```maps```, ```langs```, and ```builds``` lua tables respectively. Here's an example configuration:
 

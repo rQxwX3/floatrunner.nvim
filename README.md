@@ -110,3 +110,4 @@ Each build scenario is expected to be a key-value pair, consisting of the name o
 - ~~Reconsider .gitignore~~
 - Refactor tests
 - Add debugging commands
+- Define highlight groups

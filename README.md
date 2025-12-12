@@ -1,15 +1,14 @@
-# fl🎈at👟ner.nvim
-**Your keymap is your command**
+# floatrunner.nvim
 
 
 ![floatrunner-demo](https://github.com/user-attachments/assets/72a0aabd-5a55-48d5-89ee-7f0d3bd04c78)
 
 
 ## What is floatrunner.nvim?
-```floatrunner.nvim``` is a Neovim plugin for running:
-- build scripts (build.sh, Makefile, CMake, etc)
-- compiler commands (gcc, g++, rustc, javac, etc)
-- your programs (./anything)
+```floatrunner.nvim``` is a Neovim plugin for running
+- build scripts (build.sh, Makefile, etc)
+- compiler commands (g++, rustc, etc)
+- any other programs
 
 inside a floating terminal inside Neovim.
 
@@ -17,16 +16,16 @@ inside a floating terminal inside Neovim.
 ```floatrunner.nvim``` reduces my typical workflow:
 - Make changes to a file
 - ~~Quit Neovim~~
-- ~~Run command(s)~~ **Hit three keys**
+- ~~Run command(s)~~ **keymap**
 - ~~Open Neovim~~
 
 While there definitely are [other options](#similar-projects) for the same use case, I decided to build everything from scratch, to configure all to my liking, and (hopefully) learn more about Neovim.
 
-## 🗝 Requirements
+## Requirements
 
 - **Neovim v0.11+**
 
-## 📦 Installation
+## Installation
 
 ### Using [lazy.nvim](https://github.com/folke/lazy.nvim)
 
@@ -39,7 +38,7 @@ While there definitely are [other options](#similar-projects) for the same use c
 }
 ```
 
-## 🕹️ Usage
+## Usage
 Try these commands to see if installation went successfull:
 ```
 :FloatRunner toggle
@@ -50,9 +49,9 @@ Try these commands to see if installation went successfull:
 
 Run ```:help floatrunner``` to see more information on usage.
 
-## ⚙️ Configuration
+## Configuration
 
-There is no default configuration provided in ```floatrunner.nvim```. Feel free to configure everything to your liking: keymaps, languages supported, and build scripts scenarios. Those are configured using ```maps```, ```langs```, and ```builds``` lua tables respectively. Here's an example configuration:
+There is no default configuration provided in ```floatrunner.nvim```. Feel free to configure everything to your liking: keymaps, languages supported, and build scenarios. Those are configured using ```maps```, ```langs```, and ```builds``` lua tables respectively. Here's an example configuration:
 
 ```lua
 require("floatrunner").setup({
@@ -75,7 +74,7 @@ require("floatrunner").setup({
 })
 ```
 ### Maps
-Here's the full list of the available actions for mapping:
+These are all actions available for mapping:
 - ```floaterm_on``` shows the floating terminal
 - ```floaterm_off``` hides the floating terminal (works in ```terminal``` mode)
 - ```floatrun``` runs the current file
@@ -84,7 +83,7 @@ Here's the full list of the available actions for mapping:
 **Note**: for ```floatbuild``` to work the current file has to be present in any directory of the project (not necessarily the one containing the build file).
 
 ### Langs
-As shown in the example config, ```floatrunner.nvim``` expects you to use ```%``` to indicate the name of the current file with no extension (use ```%.``` for current file **with** extension) in ```langs.argv```.
+As shown in the example config, ```floatrunner.nvim``` expects you to use ```%``` to indicate the name of the current file without the extension (use ```%.``` for current file **with** the extension) in ```langs.argv```.
 
 **Note**: although ```gcc``` command uses the same argument twice, ```floatrunner.nvim``` expects as many arguments in ```argv``` as there are ```%s``` placeholders in ```command``` string.
 
